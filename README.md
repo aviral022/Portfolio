@@ -1,6 +1,4 @@
-<p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=28&duration=3000&pause=1000&color=06B6D4&center=true&vCenter=true&repeat=true&width=700&height=50&lines=Aviral+Dubey+Portfolio" alt="Typing SVG" />
-</p>
+<h1 align="center">Aviral Dubey Portfolio</h1>
 
 <p align="center">
   <a href="https://github.com/aviral022"><img src="https://img.shields.io/badge/GitHub-aviral022-181717?style=for-the-badge&logo=github" alt="GitHub" /></a>
