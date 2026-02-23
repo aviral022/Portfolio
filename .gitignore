@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+
+# Virtual Environment
+venv/
+env/
+.venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment Variables
+.env
+
+# VS Code
+.vscode/
+
+# Mac
+.DS_Store
+
+# Logs
+*.log
+
+# Model files
+*.h5
+*.pkl
+*.joblib
+*.sav
+
+# Node
+node_modules/

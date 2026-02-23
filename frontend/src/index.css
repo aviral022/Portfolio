@@ -1,0 +1,756 @@
+@import "tailwindcss";
+
+/* ── Custom Properties ───────────────────────────────────────────────── */
+:root {
+  --bg-primary: #060614;
+  --bg-card: rgba(12, 12, 32, 0.65);
+  --border-glass: rgba(255, 255, 255, 0.07);
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --accent-cyan: #06b6d4;
+  --accent-purple: #a855f7;
+  --accent-pink: #ec4899;
+  --accent-green: #10b981;
+}
+
+/* ── Base Reset & Dark Theme ─────────────────────────────────────────── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   AURORA ANIMATED BACKGROUND with STARFIELD PARTICLES
+   ════════════════════════════════════════════════════════════════════════ */
+
+.aurora-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Aurora gradient blobs */
+.aurora-bg::before,
+.aurora-bg::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(140px);
+  opacity: 0.25;
+  animation: aurora-drift 14s ease-in-out infinite alternate;
+}
+
+.aurora-bg::before {
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, var(--accent-cyan), transparent 70%);
+  top: -15%;
+  left: -12%;
+  animation-delay: 0s;
+}
+
+.aurora-bg::after {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, var(--accent-purple), transparent 70%);
+  bottom: -15%;
+  right: -12%;
+  animation-delay: -7s;
+}
+
+/* Third floating blob for depth */
+.aurora-blob-3 {
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-pink), transparent 70%);
+  filter: blur(140px);
+  opacity: 0.15;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: aurora-drift 18s ease-in-out infinite alternate-reverse;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Subtle starfield layer using box-shadow particles */
+.starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.starfield::before,
+.starfield::after {
+  content: '';
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  border-radius: 50%;
+  animation: twinkle 6s ease-in-out infinite alternate;
+}
+
+/* Layer 1: small, dim stars */
+.starfield::before {
+  box-shadow:
+    120px 80px 0 0 rgba(255, 255, 255, 0.3),
+    350px 200px 0 0 rgba(255, 255, 255, 0.2),
+    600px 120px 0 0 rgba(255, 255, 255, 0.4),
+    900px 300px 0 0 rgba(255, 255, 255, 0.15),
+    150px 450px 0 0 rgba(255, 255, 255, 0.3),
+    450px 550px 0 0 rgba(255, 255, 255, 0.2),
+    780px 480px 0 0 rgba(255, 255, 255, 0.35),
+    1050px 150px 0 0 rgba(255, 255, 255, 0.25),
+    1200px 420px 0 0 rgba(255, 255, 255, 0.2),
+    300px 700px 0 0 rgba(255, 255, 255, 0.3),
+    700px 650px 0 0 rgba(255, 255, 255, 0.15),
+    1100px 600px 0 0 rgba(255, 255, 255, 0.25),
+    200px 850px 0 0 rgba(255, 255, 255, 0.2),
+    550px 800px 0 0 rgba(255, 255, 255, 0.4),
+    950px 780px 0 0 rgba(255, 255, 255, 0.2),
+    80px 300px 0 0 rgba(255, 255, 255, 0.25),
+    1300px 280px 0 0 rgba(255, 255, 255, 0.3),
+    400px 380px 0 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Layer 2: brighter accent stars */
+.starfield::after {
+  box-shadow:
+    250px 150px 0 0.5px rgba(6, 182, 212, 0.4),
+    700px 280px 0 0.5px rgba(168, 85, 247, 0.35),
+    1100px 100px 0 0.5px rgba(6, 182, 212, 0.3),
+    400px 500px 0 0.5px rgba(236, 72, 153, 0.3),
+    850px 600px 0 0.5px rgba(6, 182, 212, 0.25),
+    150px 620px 0 0.5px rgba(168, 85, 247, 0.3),
+    1000px 450px 0 0.5px rgba(6, 182, 212, 0.35),
+    500px 180px 0 0.5px rgba(236, 72, 153, 0.25),
+    1250px 550px 0 0.5px rgba(168, 85, 247, 0.3),
+    320px 900px 0 0.5px rgba(6, 182, 212, 0.3);
+  animation-delay: -3s;
+}
+
+@keyframes aurora-drift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  33% {
+    transform: translate(60px, -40px) scale(1.1);
+  }
+
+  66% {
+    transform: translate(-40px, 60px) scale(0.95);
+  }
+
+  100% {
+    transform: translate(30px, 30px) scale(1.05);
+  }
+}
+
+@keyframes twinkle {
+
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   GLASSMORPHISM CARD
+   ════════════════════════════════════════════════════════════════════════ */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--border-glass);
+  border-radius: 16px;
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.glass-card:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 8px 32px rgba(6, 182, 212, 0.08),
+    0 0 0 1px rgba(6, 182, 212, 0.05);
+  transform: translateY(-3px);
+}
+
+/* ── Gradient Text ───────────────────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Section Headings ────────────────────────────────────────────────── */
+.section-heading {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+/* ── Section Container ───────────────────────────────────────────────── */
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 6rem 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 640px) {
+  .section-container {
+    padding: 4rem 1rem;
+  }
+
+  .section-heading {
+    font-size: 1.6rem;
+    margin-bottom: 2rem;
+  }
+}
+
+/* ── Custom Scrollbar ────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.35);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.55);
+}
+
+/* Chatbot internal scrollbar */
+.chatbot-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.chatbot-scroll::-webkit-scrollbar-thumb {
+  background: rgba(6, 182, 212, 0.3);
+  border-radius: 2px;
+}
+
+/* ── Links ───────────────────────────────────────────────────────────── */
+a {
+  color: var(--accent-cyan);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: var(--accent-purple);
+}
+
+/* ── Skill Badge ─────────────────────────────────────────────────────── */
+.skill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: rgba(6, 182, 212, 0.08);
+  border: 1px solid rgba(6, 182, 212, 0.18);
+  color: var(--accent-cyan);
+  transition: all 0.25s ease;
+}
+
+.skill-badge:hover {
+  background: rgba(6, 182, 212, 0.18);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.12);
+}
+
+/* ── Smooth section fade-in utility ──────────────────────────────────── */
+.fade-in-section {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Hero Name Glow ──────────────────────────────────────────────────── */
+.hero-glow {
+  filter: drop-shadow(0 0 30px rgba(6, 182, 212, 0.25)) drop-shadow(0 0 60px rgba(168, 85, 247, 0.15));
+}
+
+.hero-name {
+  text-shadow: 0 0 80px rgba(6, 182, 212, 0.12);
+}
+
+/* ── Hero Bio Glassmorphism Card ─────────────────────────────────────── */
+.hero-bio-card {
+  background: rgba(12, 12, 35, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  padding: 1.75rem 2rem;
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+@media (max-width: 640px) {
+  .hero-bio-card {
+    padding: 1.25rem 1.25rem;
+    border-radius: 16px;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   NOW PLAYING SECTION — Spotify-inspired
+   ════════════════════════════════════════════════════════════════════════ */
+
+.np-card {
+  max-width: 640px;
+  margin: 0 auto;
+  background: rgba(18, 18, 18, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 24px;
+  padding: 2.25rem 2.5rem;
+  box-shadow:
+    0 12px 48px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.np-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 16px 56px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(30, 215, 96, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* ── Top row: avatar + info ──────────────────────────────────────────── */
+.np-top {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.75rem;
+}
+
+/* Avatar with animated glow ring */
+.np-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+}
+
+.np-avatar-glow {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg,
+      rgba(30, 215, 96, 0.6),
+      rgba(6, 182, 212, 0.5),
+      rgba(168, 85, 247, 0.4),
+      rgba(30, 215, 96, 0.6));
+  animation: np-glow-spin 4s linear infinite;
+  filter: blur(3px);
+}
+
+@keyframes np-glow-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.np-avatar {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 3px solid rgba(18, 18, 18, 0.9);
+}
+
+.np-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.np-avatar-initials {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #1ed760, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Info block ──────────────────────────────────────────────────────── */
+.np-info {
+  min-width: 0;
+}
+
+.np-label {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #1ed760;
+  margin-bottom: 0.35rem;
+}
+
+.np-name {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+  margin-bottom: 0.25rem;
+}
+
+.np-subtitle {
+  font-size: 0.8rem;
+  color: #a0a0a0;
+  line-height: 1.4;
+}
+
+/* ── Progress bar ────────────────────────────────────────────────────── */
+.np-progress-wrap {
+  margin-bottom: 1.5rem;
+}
+
+.np-progress-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.np-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #1ed760, #1db954);
+  border-radius: 4px;
+  position: relative;
+}
+
+.np-progress-fill::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #1ed760;
+  box-shadow: 0 0 8px rgba(30, 215, 96, 0.5);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.np-card:hover .np-progress-fill::after {
+  opacity: 1;
+}
+
+.np-progress-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  font-size: 0.65rem;
+  color: #666;
+}
+
+/* ── Summary ─────────────────────────────────────────────────────────── */
+.np-summary {
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: #b0b0b0;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Skill badges ────────────────────────────────────────────────────── */
+.np-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.np-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(30, 215, 96, 0.08);
+  border: 1px solid rgba(30, 215, 96, 0.18);
+  color: #1ed760;
+  transition: all 0.25s ease;
+  cursor: default;
+}
+
+.np-badge:hover {
+  background: rgba(30, 215, 96, 0.18);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(30, 215, 96, 0.12);
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────── */
+@media (max-width: 500px) {
+  .np-card {
+    padding: 1.5rem 1.25rem;
+    border-radius: 18px;
+  }
+
+  .np-top {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .np-name {
+    font-size: 1.25rem;
+  }
+
+  .np-subtitle {
+    font-size: 0.75rem;
+  }
+
+  .np-label {
+    display: block;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   CODE BATTLE SECTION
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── Tabs ────────────────────────────────────────────────────────────── */
+.cb-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.cb-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.25rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(18, 18, 18, 0.5);
+  color: #94a3b8;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.cb-tab:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: #e2e8f0;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.cb-tab-active {
+  background: rgba(6, 182, 212, 0.1);
+  border-color: rgba(6, 182, 212, 0.25);
+  color: #06b6d4;
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.08);
+}
+
+.cb-tab-emoji {
+  font-size: 1rem;
+}
+
+/* ── Card ────────────────────────────────────────────────────────────── */
+.cb-card {
+  max-width: 620px;
+  margin: 0 auto;
+  background: rgba(12, 12, 32, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  padding: 2rem 2.25rem;
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cb-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 14px 50px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(6, 182, 212, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* ── Description ─────────────────────────────────────────────────────── */
+.cb-description {
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: #b0b0b0;
+  margin-bottom: 1.5rem;
+  white-space: pre-line;
+}
+
+/* ── Input ────────────────────────────────────────────────────────────── */
+.cb-input-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #64748b;
+  margin-bottom: 0.5rem;
+}
+
+.cb-input-row {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.cb-input {
+  flex: 1;
+  padding: 0.7rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.3);
+  color: #e2e8f0;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.cb-input::placeholder {
+  color: #475569;
+}
+
+.cb-input:focus {
+  border-color: rgba(6, 182, 212, 0.4);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.08);
+}
+
+/* ── Run button ──────────────────────────────────────────────────────── */
+.cb-run-btn {
+  padding: 0.7rem 1.4rem;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #06b6d4, #a855f7);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  white-space: nowrap;
+}
+
+.cb-run-btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 4px 18px rgba(6, 182, 212, 0.25);
+}
+
+.cb-run-btn:active {
+  transform: scale(0.97);
+}
+
+/* ── Output ──────────────────────────────────────────────────────────── */
+.cb-output {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  overflow: hidden;
+}
+
+.cb-output-label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #06b6d4;
+  margin-bottom: 0.5rem;
+}
+
+.cb-output-text {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────── */
+@media (max-width: 500px) {
+  .cb-card {
+    padding: 1.5rem 1.25rem;
+    border-radius: 16px;
+  }
+
+  .cb-input-row {
+    flex-direction: column;
+  }
+
+  .cb-run-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
